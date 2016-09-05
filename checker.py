@@ -38,6 +38,10 @@ class Checker():
                 'Pranshu Shubham': 'F000E5D',
                 'Prachi Sinha': 'B0FEF3D',
                 'Ayush Sinha': 'D2DD36B',
+                'Rahul Bajaj': 'D0D7E4D',
+                'Aditya Ganesh': 'D645468',
+
+
         }
         self.mainD = OrderedDict(sorted(main_dict.items(), key=lambda t: t[0]))
         d = self.mainD # making init ordered dict for ease in writing
@@ -62,16 +66,16 @@ class Checker():
         self.flag = [] # creating flag values to be used later
         for number in range(0, 50):
             self.flag.append(0)
-        self.wb.save('details.xlsx')
+        self.wb.save('attendance.xlsx')
 
     def get_serial(self, r):
         val = self.ser.readline()
         val = str(val)
         val.strip()
         val.replace(" ", "")
-        rfid = val[0:7]
-        date = val[8:15]
-        time = val[15:]
+        rfid = val[0:8]
+        date = val[9:19]
+        time = val[19:27]
         if r == 'rfid':
             return rfid
         if r == 'date':
@@ -94,21 +98,24 @@ class Checker():
                             c = self.ws.cell(row=count+1, column=4)
                             c.value = time_entry
                             time_entry = None
+                            self.ser.write(b'1')
 
                         elif self.flag[count] == 1:
                             self.flag[count] = 2
                             c = self.ws.cell(row=count+1, column=5)
                             c.value = time_entry
                             time_entry = None
+                            self.ser.write(b'1')
 
                         elif self.flag[count] == 2:
                             self.flag[count] = 2
                             time_entry = None
+                            self.ser.write(b'0')
 
                         else:
                             time_entry = None
                 else:
-                    continue
+                    self.ser.write(b'0')
         self.wb.save('details.xlsx')
 
 

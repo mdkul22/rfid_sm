@@ -1,14 +1,14 @@
 import serial
 ser = serial.Serial('COM6', 9600)
 
+
 class Saver():
 
     def readr(self):
         self.x = ser.readline()
         s = str(self.x)
-        s = s.replace("b'Card UID:", "")
         s = s.replace(" ", "")
-        s = s[0:7]
+        s = s[2:9]
         print(s)
         self.name = input("Write your name: ")
         f = open('details', 'a')
